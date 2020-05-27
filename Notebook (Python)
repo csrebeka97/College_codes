@@ -1,0 +1,54 @@
+
+
+import pickle
+
+choice = 0
+import time
+try: 
+	readfile = open("notebook.dat", "rb")
+	justread = pickle.load(readfile)
+	print("Now using file notebook.dat")
+except Exception:
+	readfile = open("notebook.dat","wb")
+	justread= []
+	print("No default notebook was found, created one.")
+	
+	
+while choice != 5:
+	print("(1) Read the notebook")
+	print("(2) Add note")
+	print("(3) Edit a note")
+	print("(4) Delete a note")
+	print("(5) Save and quit\n")
+	
+	choice = int(input("Please select one:"))
+	if choice == 1:
+		for i in justread:
+			print(i)
+	elif choice == 2:
+		date = time.strftime("%X %x")
+		text = input("Write a new note:")
+		written = text+":::"+date
+		justread.append(written)
+#If the user is not pleased with a note, it is possible to change one note with the option 3. 
+#Then the program asks for the edited note (0 is the first one on the list) with the prompt "The list has [number] notes.\nWhich of them will be changed?:".
+#After giving an input, the user is then printed the selected note and asked for a new note "Give the new note:". This new note replaces the old note on the list:
+	elif choice == 3:
+		print("The list has ", len(justread)," notes.")
+		change=int(input("Which of them will be changed?:"))
+		print(justread[change])
+		note=input("Give the new note:")
+		written=note+":::"+date
+		justread[change] = written
+		
+	elif choice == 4:
+		print("The list has ", len(justread)," notes.")
+		change=int(input("Which of them will be deleted?:"))
+		print("Deleted note ",justread[change-1],)
+		justread.pop(change-1)
+			
+	else:
+		pickle.dump(justread,readfile)
+		readfile.close()
+		print("Notebook shutting down, thank you.")
+		break
